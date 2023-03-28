@@ -1,0 +1,26 @@
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongodb
+  labels:
+    name: mongodb
+    tier: db
+spec:
+  containers:
+  - image: techworldwithsiva/mongodb:v1
+    name: mongodb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  selector:
+    name: mongodb
+    tier: db
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
