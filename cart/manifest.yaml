@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cart-config
+data:
+  CATALOGUE_HOST: "http://CATALOGUE:80"
+  REDIS_HOST: "redis"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cart
+  labels:
+    name: cart
+    tier: app
+spec:
+  containers:
+  - image: techworldwithsiva/cart:k8
+    name: cart
+    envFrom:
+    - configMapRef:
+        name: cart-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart
+spec:
+  selector:
+    name: cart
+    tier: app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
