@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shipping-config
+data:
+  CART_ENDPOINT: "cart:80"
+  DB_HOST: "mysql"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shipping
+  labels:
+    name: shipping
+    tier: app
+spec:
+  containers:
+  - image: techworldwithsiva/shipping:v1
+    name: shipping
+    envFrom:
+    - configMapRef:
+        name: shipping-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shipping
+spec:
+  selector:
+    name: shipping
+    tier: app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
