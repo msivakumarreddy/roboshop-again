@@ -11,9 +11,8 @@ spec:
   containers:
   - image: rabbitmq
     name: rabbitmq
-    containerPorts:
-    - 5672
-    - 15672
+    - containerPort: 5672
+    - containerPort: 15672
 ---
 apiVersion: v1
 kind: Service
