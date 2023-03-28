@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+data:
+  # property-like keys; each key maps to a simple value
+  MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+  MYSQL_DATABASE: "cities"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+name: mysql-secret
+type: Opaque
+data:
+MYSQL_USER: "c2hpcHBpbmc="
+MYSQL_PASSWORD: "c2VjcmV0"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+  labels:
+    name: mysql
+    tier: db
+spec:
+  containers:
+  - image: techworldwithsiva/mysql:v1
+    name: mysql
+    envFrom:
+    - configMapRef:
+        name: mysql-config
+    - secretRef:
+        name: mysql-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  selector:
+    name: mysql
+    tier: db
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
