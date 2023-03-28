@@ -26,7 +26,7 @@ metadata:
     tier: db
 spec:
   containers:
-  - image: techworldwithsiva/mysql:v1
+  - image: techworldwithsiva/mysql:k8
     name: mysql
     envFrom:
     - configMapRef:
