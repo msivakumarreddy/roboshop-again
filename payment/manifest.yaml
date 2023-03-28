@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payment-config
+data:
+  CART_HOST: "cart"
+  USER_HOST: "user"
+  AMQP_HOST: "rabbitmq"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: payment
+  labels:
+    name: payment
+    tier: app
+spec:
+  containers:
+  - image: techworldwithsiva/payment:k8
+    name: payment
+    envFrom:
+    - configMapRef:
+        name: payment-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment
+spec:
+  selector:
+    name: payment
+    tier: app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
